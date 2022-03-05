@@ -32,7 +32,7 @@ fn main() {
     let mut database = Database{
         db: HashMap::new(),
     };
-    let mut ctrl: String = "a".to_string();
+    let mut ctrl: String;
     views::main_menu(); 
     ctrl = read!("{}\n");
     while ctrl != "0"{

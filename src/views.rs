@@ -1,6 +1,3 @@
-use std::fs;
-use std::collections::HashMap;
-
 pub fn main_menu(){
     println!("------------");
     println!("--- ACTIONS ---");
