@@ -11,15 +11,15 @@ REF: https://omanualdofreelancer.com/sql-crud-iniciantes/
 - [ ] Pedir nome da tabela.
 - [ ] Verificar se tabela ja existe, se exitir, se deseja substituir, tendo que confimar duas vezes.
 - [ ] Pedir atribuitos da campos.
-    - [] Dar exemplo de campos + atributos. <i>i.e {atributo} {tipo} {primary_key} etc</i>.
+    - [ ] Dar exemplo de campos + atributos. <i>i.e {atributo} {tipo} {primary_key} etc</i>.
     - [ ] Lembrete da primary_key em vermelho.
 
-## 3. Adiocionar valores em uma tabela.
-- [ ] Inserir em qual tabela.
-- [ ] Quais campos da tabela. 
-- [ ] Valores a serem inseridos. 
+## 3. Adicionar valores em uma tabela.
+- [X] Inserir em qual tabela.
+- [X] Quais campos da tabela. 
+- [X] Valores a serem inseridos. 
 
-## 4. Selecinar valores de uma tabela.
+## 4. Visualizar valores de uma tabela.
 - [ ] Selecionar toda a tabela. 
 - [ ] Selecionar um ID especifico (dependendo da primary_key). 
 
@@ -35,3 +35,6 @@ REF: https://omanualdofreelancer.com/sql-crud-iniciantes/
 
 ## 7. Update
 - [ ] Atualizar campo na tabela.
+
+## 8. Extras
+- [ ] Cores nos inputs
