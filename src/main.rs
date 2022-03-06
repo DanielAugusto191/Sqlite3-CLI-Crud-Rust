@@ -28,7 +28,6 @@ impl Server {
 }
 
 fn main() {
-
     let mut connection: sqlite3::Connection;
     let mut all_database = Server{
         db: HashMap::new(),
@@ -40,10 +39,10 @@ fn main() {
         match &ctrl[..]{
             "1" => {
                 println!("--- New DB ---");
-                println!("Type database name, if you wanna cancel type *");
+                println!("Type database name, To cancel type .");
                 ctrl = read!("{}\n");
                 match &ctrl[..]{
-                    "*" => (),
+                    "." => (),
                     _ => {
                         sqlite3::open(format!("src/databases/{}", &ctrl)).unwrap();
                         }
@@ -51,37 +50,82 @@ fn main() {
                 },
             "2" => {
                 println!("--- Use DB ---");
-                println!("What is the number of database that you want to use, if you wanna cancel type *");
+                println!("What is the number of database that you want to use, To cancel type .");
                 all_database.print_db();
                 ctrl = read!("{}\n");
                 match &ctrl[..] {
-                    "*" => (),
+                    "." => break,
                     _ => {
-                        connection = sqlite3::open(format!("src/databases/{}", &ctrl)).unwrap();
+                        connection = sqlite3::open(all_database.db[&ctrl].clone()).unwrap();
                         views::selected_table(ctrl[..].split("/").last().unwrap().to_string());
                         ctrl = read!("{}\n");
-                        match &ctrl[..]{
-                            "1" => { // Insert
-                                println!("Table name: (* to cancel)");
-                                let mut table: String = read!("{}\n");
-                                if table == "*" {break;}
-                                println!("What fields do you want to add: (separated by comma) i.e: name,age,contry");
-                                let mut fields: String = read!("{}\n");
-                                println!("Value to add: (separated by comma) i.e: Daniel,21,Brazil");
-                                let mut values: String = read!("{}\n");
-                                match connection.execute(format!("INSERT INTO {} ({}) VALUES {} ", table, fields, values)){
-                                    Ok(_) => println!("Adiocionado com sucesso!"),
-                                    Err(_) => println!("Erro ao adicionar!")
+                        while ctrl != "0"{
+                            match &ctrl[..]{
+                                "1" => { // Insert
+                                    println!("Table name: (. to cancel)");
+                                    let table: String = read!("{}\n");
+                                    if table == "." {break;}
+                                    println!("What fields do you want to add: (separated by comma) i.e: name,age,contry");
+                                    let fields: String = read!("{}\n");
+                                    println!("Value to add: (separated by comma) i.e: Daniel,21,Brazil");
+                                    let values: String = read!("{}\n");
+                                    match connection.execute(format!("INSERT INTO {} ({}) VALUES {} ", table, fields, values)){
+                                        Ok(_) => println!("Successfully added"),
+                                        Err(e) => println!("Err {}", e)
+                                    }
+                                },
+                                "2" => {
+                                    println!("Table name: (To cancel type .)");
+                                    let table: String = read!("{}\n");
+                                    println!("What fields do you want to select: (separated by comma) i.e: name,age,contry");
+                                    let fields: String = read!("{}\n");
+                                    match connection.iterate(format!("SELECT ({}) from {}", fields, table), |pairs| {
+                                        println!("-------------------------------");
+                                        for &(columns, value) in pairs.iter(){
+                                            println!("| {} - {} \t |", columns, value.unwrap());
+                                        }
+                                        println!("-------------------------------");
+                                        true   
+                                    }){
+                                        Ok(_) => (),
+                                        Err(x) => println!("Err: {}", x)
+                                    };
                                 }
-                            },
-                            "2" => (),// Select
-                            "3" => (),// Update
-                            "4" => (),// Delete
-                            "5" => (),// Options
-                            "0" => {
-                                views::table_option()
-                            },
-                            _ => println!("Opção Invalida!")
+                                "3" => (),// Update
+                                "4" => (),// Delete
+                                "5" => {// Options
+                                    views::table_option();
+                                    ctrl = read!("{}\n");
+                                    while ctrl != "0"{
+                                        match &ctrl[..] {
+                                            "1" => {
+                                                println!("Table name:");
+                                                let table: String = read!("{}\n");
+                                                println!("Fields, on SQL style (separated by comma) i.e: Columm1 type, Columm2 type. E.g: ID INTEGER primary_key, name VARCHAR(50)");        
+                                                let fields: String = read!("{}\n");
+                                                match connection.execute(format!("CREATE TABLE {} ({})", table, fields)){
+                                                    Ok(_) => println!("Successfully added"),
+                                                    Err(e) => println!("Err {}", e)
+                                                }
+                                            },
+                                            "2" => (),
+                                            "3" => (),
+                                            "4" => (),
+                                            "0" => (),
+                                            _ => {
+                                                println!("Invalid Option");
+                                            }
+                                        }
+                                        views::table_option();
+                                        ctrl = read!("{}\n");
+                                    }
+    
+                                },
+                                "0" => (),
+                                _ => println!("Opção Invalida!")
+                            }
+                            views::selected_table(ctrl[..].split("/").last().unwrap().to_string());
+                            ctrl = read!("{}\n");
                         }
                     }   
                 }
