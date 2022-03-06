@@ -18,4 +18,4 @@ REF: https://omanualdofreelancer.com/sql-crud-iniciantes/
 - [X] Delete values
 
 ## 4. Plus
-- [ ] colored messages
+- [X] colored messages

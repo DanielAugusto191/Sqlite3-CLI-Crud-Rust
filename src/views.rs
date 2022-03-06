@@ -1,8 +1,8 @@
 use colored::Colorize;
 
-pub fn menu(ID: usize){ 
+pub fn menu(id: usize){ 
     let mut msg: Vec<&str> = Vec::new();
-    match ID {
+    match id {
         1 => { // Initial
             msg.push("Create new database");
             msg.push("Use a database");
